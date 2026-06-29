@@ -1,5 +1,6 @@
 using System.Net;
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MotoMaintenance.Api.Common.Exceptions;
 
@@ -30,6 +31,11 @@ public sealed class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Ex
                 Title = "Validation failed",
                 Instance = ctx.Request.Path
             });
+        }
+        catch (BadHttpRequestException ex)
+        {
+            await WriteProblem(ctx, (int)HttpStatusCode.BadRequest,
+                "Bad Request", ex.Message);
         }
         catch (Exception ex)
         {
