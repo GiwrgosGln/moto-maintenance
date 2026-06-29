@@ -1,10 +1,8 @@
+using MotoMaintenance.Api.Domain.Entities.Common;
+
 namespace MotoMaintenance.Api.Domain.Entities;
 
-public sealed class Motorcycle
+public sealed class Manufacturer : AuditableEntity
 {
-    public int Id { get; set; }
-    public required string Make { get; set; }
-    public required string Model { get; set; }
-    public int Year { get; set; }
-    public required string Vin { get; set; }
+    public required string Name { get; set; }
 }

@@ -23,6 +23,7 @@ public sealed class AuditableEntityInterceptor(IHttpContextAccessor http)
                 case EntityState.Added:
                     entry.Entity.CreatedAt = DateTimeOffset.UtcNow;
                     entry.Entity.CreatedBy = user;
+                    entry.Entity.UpdatedAt = DateTimeOffset.UtcNow;
                     break;
                 case EntityState.Modified:
                     entry.Entity.UpdatedAt = DateTimeOffset.UtcNow;

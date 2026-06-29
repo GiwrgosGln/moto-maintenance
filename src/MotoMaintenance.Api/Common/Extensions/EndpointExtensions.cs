@@ -1,5 +1,3 @@
-using MotoMaintenance.Api.Common.Contracts;
-
 namespace MotoMaintenance.Api.Common.Extensions;
 
 public static class EndpointExtensions
