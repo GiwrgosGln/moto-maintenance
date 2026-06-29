@@ -14,7 +14,8 @@ public static class DbContextExtensions
 
         services.AddDbContext<MotoDbContext>((sp, opts) =>
         {
-            opts.UseSqlServer(cfg.GetConnectionString("MotoDb"));
+            opts.UseSqlServer(cfg.GetConnectionString("MotoDb"), sql => sql.MigrationsAssembly("MotoMaintenance.Api"));
+            opts.UseSnakeCaseNamingConvention();
             opts.AddInterceptors(sp.GetRequiredService<AuditableEntityInterceptor>());
         });
 

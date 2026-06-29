@@ -2,8 +2,14 @@ using Microsoft.EntityFrameworkCore;
 using MotoMaintenance.Api.Common.Extensions;
 using MotoMaintenance.Api.Common.Middleware;
 using MotoMaintenance.Api.Database;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.SnakeCaseLower;
+});
 
 // Infrastructure
 builder.Services.AddApplication();
@@ -23,6 +29,7 @@ app.UseHttpsRedirection();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
     app.Services.ApplyMigrations();
 }
 

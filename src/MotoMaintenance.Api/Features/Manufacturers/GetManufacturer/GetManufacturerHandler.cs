@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MotoMaintenance.Api.Common.Contracts.DTOs;
 using MotoMaintenance.Api.Common.Exceptions;
 using MotoMaintenance.Api.Database;
 
