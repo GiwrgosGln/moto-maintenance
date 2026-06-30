@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MotoMaintenance.Api.Database;
 
@@ -11,9 +12,11 @@ using MotoMaintenance.Api.Database;
 namespace MotoMaintenance.Api.Migrations
 {
     [DbContext(typeof(MotoDbContext))]
-    partial class MotoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260630074626_AddMotorcycles")]
+    partial class AddMotorcycles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,8 +108,7 @@ namespace MotoMaintenance.Api.Migrations
 
                     b.Property<string>("Color")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("color");
 
                     b.Property<DateTimeOffset>("CreatedAt")
@@ -127,14 +129,12 @@ namespace MotoMaintenance.Api.Migrations
 
                     b.Property<string>("ModelYear")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("model_year");
 
                     b.Property<string>("Nickname")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("nickname");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
@@ -153,9 +153,6 @@ namespace MotoMaintenance.Api.Migrations
 
                     b.HasIndex("ModelId")
                         .HasDatabaseName("ix_motorcycles_model_id");
-
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_motorcycles_user_id");
 
                     b.ToTable("motorcycles", (string)null);
                 });
@@ -177,14 +174,14 @@ namespace MotoMaintenance.Api.Migrations
                     b.HasOne("MotoMaintenance.Api.Domain.Entities.Manufacturer", "Manufacturer")
                         .WithMany()
                         .HasForeignKey("ManufacturerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_motorcycles_manufacturers_manufacturer_id");
 
                     b.HasOne("MotoMaintenance.Api.Domain.Entities.Model", "Model")
                         .WithMany()
                         .HasForeignKey("ModelId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_motorcycles_models_model_id");
 
