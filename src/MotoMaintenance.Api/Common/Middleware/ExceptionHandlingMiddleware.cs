@@ -35,7 +35,7 @@ public sealed class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Ex
         catch (BadHttpRequestException ex)
         {
             await WriteProblem(ctx, (int)HttpStatusCode.BadRequest,
-                "Bad Request", ex.Message);
+                "Bad Request", ExtractBindingDetail(ex));
         }
         catch (Exception ex)
         {
@@ -52,5 +52,33 @@ public sealed class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Ex
         {
             Status = status, Title = title, Detail = detail, Instance = ctx.Request.Path
         });
+    }
+
+    private static string ExtractBindingDetail(BadHttpRequestException ex)
+    {
+        var msg = ex.Message;
+
+        const string jsonMarker = "as JSON";
+        var jsonIdx = msg.IndexOf(jsonMarker, StringComparison.Ordinal);
+        if (jsonIdx >= 0)
+        {
+            const string paramMarker = "parameter \"";
+            var paramStart = msg.IndexOf(paramMarker, StringComparison.Ordinal);
+            if (paramStart >= 0)
+            {
+                paramStart += paramMarker.Length;
+                var paramEnd = msg.IndexOf('"', paramStart);
+                if (paramEnd > paramStart)
+                {
+                    var paramName = msg[paramStart..paramEnd];
+                    return $"The request body is not valid JSON or is missing required values for '{paramName}'.";
+                }
+            }
+
+            var detail = msg[(jsonIdx + jsonMarker.Length)..].TrimStart(' ', '.', ':');
+            return string.IsNullOrEmpty(detail) ? msg : detail;
+        }
+
+        return msg;
     }
 }
