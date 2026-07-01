@@ -5,6 +5,7 @@ namespace MotoMaintenance.Api.Database;
 
 public sealed class MotoDbContext(DbContextOptions<MotoDbContext> options) : DbContext(options)
 {
+    public DbSet<User> Users => Set<User>();
     public DbSet<Manufacturer> Manufacturers => Set<Manufacturer>();
     public DbSet<Model> Models => Set<Model>();
     public DbSet<Motorcycle> Motorcycles => Set<Motorcycle>();
